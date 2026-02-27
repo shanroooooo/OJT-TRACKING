@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OJT Tracking API Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .endpoint { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #007bff; }
+        .method { font-weight: bold; padding: 5px 10px; border-radius: 3px; color: white; display: inline-block; margin-right: 10px; }
+        .get { background: #28a745; }
+        .post { background: #007bff; }
+        .patch { background: #ffc107; color: #000; }
+        .delete { background: #dc3545; }
+        .put { background: #6f42c1; }
+        .code { background: #f8f9fa; padding: 10px; border-radius: 3px; font-family: monospace; margin: 5px 0; }
+        .example { background: #e9ecef; padding: 10px; border-radius: 3px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🎓 CTU OJT Tracking API Documentation</h1>
+    <p><strong>Base URL:</strong> <code>http://127.0.0.1:8000</code></p>
+
+    <h2>🔐 Authentication</h2>
+    
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/auth/register</strong>
+        <p>Register a new user account</p>
+        <div class="example">
+            <strong>Request:</strong>
+            <div class="code">{
+  "name": "John Student",
+  "email": "student@example.com",
+  "password": "password",
+  "password_confirmation": "password",
+  "role": "student"
+}</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/auth/login</strong>
+        <p>Login user and get token</p>
+        <div class="example">
+            <strong>Request:</strong>
+            <div class="code">{
+  "email": "student@example.com",
+  "password": "password"
+}</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/auth/logout</strong>
+        <p>Logout user (requires token)</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/user</strong>
+        <p>Get current user info (requires token)</p>
+    </div>
+
+    <h2>👨‍🎓 Student Features</h2>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/student/profile</strong>
+        <p>Create student profile</p>
+        <div class="example">
+            <strong>Request:</strong>
+            <div class="code">{
+  "student_id_number": "2023-001",
+  "course": "Bachelor of Science in Information Technology",
+  "major": "Web Development",
+  "year_level": 3,
+  "section": "A",
+  "company_name": "Tech Company Inc.",
+  "company_address": "123 Tech Street, City",
+  "supervisor_name": "John Supervisor",
+  "supervisor_contact": "09123456789",
+  "required_hours": 486,
+  "ojt_start_date": "2026-02-27",
+  "ojt_end_date": "2026-05-27"
+}</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/student/profile</strong>
+        <p>View student profile with progress</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method put">PUT</span>
+        <strong>/api/student/profile</strong>
+        <p>Update student profile</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/student/profile/summary</strong>
+        <p>Get comprehensive profile summary</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <strong>/api/student/time-in</strong>
+        <p>Log time in for daily activities</p>
+        <div class="example">
+            <strong>Request:</strong>
+            <div class="code">{
+  "activities_done": "Working on Laravel project development",
+  "remarks": "Progress good"
+}</div>
+        </div>
+    </div>
+
+    <div class="endpoint">
+        <span class="method patch">PATCH</span>
+        <strong>/api/student/time-out</strong>
+        <p>Log time out (automatic hour calculation)</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/student/today</strong>
+        <p>View today's time log status</p>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <strong>/api/student/logs</strong>
+        <p>View log history with filtering</p>
+        <div class="example">
+            <strong>Query Parameters:</strong>
+            <div class="code">?status=pending&date_from=2026-02-01&date_to=2026-02-27&per_page=15</div>
+        </div>
+    </div>
+
+    <h2>🔑 Authentication Headers</h2>
+    <p>For protected endpoints, include this header:</p>
+    <div class="code">Authorization: Bearer YOUR_TOKEN_HERE</div>
+
+    <h2>📝 Example Usage</h2>
+    <div class="example">
+        <h3>1. Register and Login</h3>
+        <div class="code"># Register
+curl -X POST http://127.0.0.1:8000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"John Student","email":"student@example.com","password":"password","role":"student"}'
+
+# Login
+curl -X POST http://127.0.0.1:8000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"student@example.com","password":"password"}'</div>
+    </div>
+
+    <div class="example">
+        <h3>2. Create Profile</h3>
+        <div class="code">curl -X POST http://127.0.0.1:8000/api/student/profile \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"student_id_number":"2023-001","course":"BSIT","year_level":3}'</div>
+    </div>
+
+    <div class="example">
+        <h3>3. Time In</h3>
+        <div class="code">curl -X POST http://127.0.0.1:8000/api/student/time-in \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{"activities_done":"Working on project","remarks":"Good progress"}'</div>
+    </div>
+
+    <p><strong>🚀 Ready to use!</strong> All endpoints are functional and tested.</p>
+</body>
+</html>

@@ -1,6 +1,7 @@
 ﻿<?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\TimeLogController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,15 @@ Route::middleware('auth:sanctum')->group(function () {
     // Student-only routes
     // ---------------------------------------------------------------
     Route::middleware('role:student')->prefix('student')->group(function () {
+        // Profile management
+        Route::post('/profile',        [StudentProfileController::class, 'store']);
+        Route::get('/profile',         [StudentProfileController::class, 'show']);
+        Route::put('/profile',         [StudentProfileController::class, 'update']);
+        Route::patch('/profile',       [StudentProfileController::class, 'update']);
+        Route::delete('/profile',      [StudentProfileController::class, 'destroy']);
+        Route::get('/profile/summary', [StudentProfileController::class, 'summary']);
+        
+        // Time logging
         Route::post('/time-in',   [TimeLogController::class, 'timeIn']);
         Route::patch('/time-out', [TimeLogController::class, 'timeOut']);
         Route::get('/today',      [TimeLogController::class, 'today']);
