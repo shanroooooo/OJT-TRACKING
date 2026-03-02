@@ -3,6 +3,8 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\TimeLogController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SupervisorController;
 use Illuminate\Support\Facades\Route;
 
 // ---------------------------------------------------------------
@@ -45,14 +47,31 @@ Route::middleware('auth:sanctum')->group(function () {
     // Supervisor-only routes
     // ---------------------------------------------------------------
     Route::middleware('role:supervisor')->prefix('supervisor')->group(function () {
-        // e.g. Route::get('/students', [SupervisorController::class, 'index']);
+        Route::get('/dashboard', [SupervisorController::class, 'dashboard']);
+        Route::get('/students', [SupervisorController::class, 'students']);
+        Route::get('/students/{studentProfile}', [SupervisorController::class, 'studentDetails']);
+        Route::get('/students/{studentProfile}/progress', [SupervisorController::class, 'studentProgress']);
+        Route::get('/students/{studentProfile}/export', [SupervisorController::class, 'exportStudentReport']);
+        Route::get('/time-logs', [SupervisorController::class, 'timeLogs']);
+        Route::post('/time-logs/{log}/review', [SupervisorController::class, 'reviewTimeLog']);
+        Route::post('/time-logs/bulk-review', [SupervisorController::class, 'bulkReviewLogs']);
     });
 
     // ---------------------------------------------------------------
     // Admin-only routes
     // ---------------------------------------------------------------
     Route::middleware('role:admin')->prefix('admin')->group(function () {
-        // e.g. Route::get('/users', [AdminController::class, 'index']);
+        Route::get('/dashboard', [AdminController::class, 'dashboard']);
+        Route::get('/users', [AdminController::class, 'users']);
+        Route::post('/users', [AdminController::class, 'createUser']);
+        Route::put('/users/{user}', [AdminController::class, 'updateUser']);
+        Route::patch('/users/{user}', [AdminController::class, 'updateUser']);
+        Route::delete('/users/{user}', [AdminController::class, 'deleteUser']);
+        Route::patch('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus']);
+        
+        Route::get('/student-profiles', [AdminController::class, 'studentProfiles']);
+        Route::get('/system-logs', [AdminController::class, 'systemLogs']);
+        Route::get('/analytics', [AdminController::class, 'analytics']);
     });
 
     // ---------------------------------------------------------------
